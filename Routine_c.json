@@ -1,0 +1,44 @@
+{
+    "Sunday": [
+      "Physics GNL,6:55-8:35",
+      "Maths HG ,8:35-10:15",
+      "Break,10:15-11:05",
+      "Electrical/Electronics LAB,11:05-1:35"
+    ],
+    "Monday": [
+        "Engineeering Drawing,6:55-8:35",
+        "Maths GBT,8:35-9:25",
+        "Maths PA,9:25-11:05",
+        "Break,11:05,11:55",
+        "Electrical/Electronics ,11:05-1:35"
+    ],
+    "Tuesday": [
+      "Physics UKJ,6:55-7:45",
+      "Electrical/Electronics ,8:35-9:25",
+      "Break,10:15-11:05",
+      "Computer Programming ,11:05-12:45",
+      "Workshop,12:45-1:35"
+
+
+    ],
+    "Wednesday": [
+      "Workshop Practical,6:55-9:25",
+      "Physics GNL,9:25-10:15",
+      "Break,10:15-11:05",
+      "Computer Programming ,11:05-12:45"
+
+    ],
+    "Thursday": [
+        "Physics Practical,7:45-9:25",
+        "Physics UKJ,9:25-10:15",
+        "Break,10:15-11:05",
+        "Computer Programming LAB,11:05-12:45"
+    ],
+    "Friday": [
+        "Engineeering Drawing ,6:55-10:15"
+    ],
+    "Saturday": [
+        "Sleep Well,12:00-12:00"
+    ]
+  }
+  

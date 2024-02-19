@@ -1,0 +1,36 @@
+{
+  "Sunday": [
+    "Physics GNL, 6:55 - 8:35",
+    "Maths HG, 8:35 - 10:15",
+    "Break, 10:15 - 11:55",
+    "Computer Lab, 11:55 - 2:25"
+  ],
+  "Monday": [
+    "Engineering Drawing, 6:55 - 8:35",
+    "Maths BGT, 8:35 - 9:25",
+    "Maths PA,9:25 - 11:05",
+    "Break, 11:05 - 11:55",
+    "Electrical/Electronics, 11:55 - 1:35"
+  ],
+  "Tuesday": [
+    "Physics UKJ, 6:55 - 7:45",
+    "Break, 7:45 - 8:35",
+    "Electrical/Electronics,8:35 - 10:15",
+    "Break, 10:15 - 11:05",
+    "Computer GG,11:05 - 12:45",
+    "Workshop, 12:45 - 1:35"
+  ],
+  "Wednesday": [
+    "Physics Practical, 7:45 - 9:25",
+    "Physics GNL,9:25 - 10:15",
+    "Computer GG, 11:05 - 12:45"
+  ],
+  "Thursday": [
+    "Woekshop, 6:55 - 9:25",
+    "Physics UKJ, 9:25 - 10:15",
+    "Break, 10:15 - 11:05",
+    "Electrical/Electronics Lab, 11:05 - 1:35"
+  ],
+  "Friday": ["Engineering Drawing, 6:55 - 10:15"],
+  "Saturday": ["Kati padhna man lageko, 00:00-00:00"]
+}
