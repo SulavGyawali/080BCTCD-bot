@@ -4,11 +4,13 @@ from discord.ext import tasks  # type: ignore
 from discord.utils import get  # type: ignore
 import json
 import datetime
+from dotenv import load_dotenv # type: ignore
+import os # type: ignore
 from PIL import Image, ImageDraw, ImageFont  # type: ignore
 
 
-TOKEN = "MTIwNzk4ODAxNjE1MzYyNDU3Ng.GFjiIY.22PaEhB4ub008XPFK9exyn0JUBMs2IxMa0uMJg"
-CHANNEL_ID = 1208790747537604618
+TOKEN = os.getenv("DISCORD_TOKEN")
+CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
 ROUTINE_TIME = datetime.time(14, 45, 0)
 ROUTINE_CONFIRM = datetime.time(14, 15, 0)
 
@@ -83,38 +85,6 @@ async def routine_image(group : str) -> None:
                 font=fnt,
             )
         img.save(f"images/routine{group.lower()}.png")
-    except Exception as e:
-        print(e)
-
-
-async def Routine(ctx, group : str) -> None:
-    try:
-        date = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime(
-            "%Y-%m-%d"
-        )
-        with open("events.json", "r") as file:
-            try:
-                events = json.load(file)
-            except:
-                events = {}
-
-        day = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%A")
-        day = day.lower()
-        day = day.capitalize()
-        data = await get_routine(group)
-
-        if not date in events.keys():
-            pass
-        elif "Holiday" in events[date]:
-            await ctx.send(f"{day} is a holiday")
-            return
-
-        embedVar = Embed(title=day, color=0x000000)
-        for items in data[day]:
-            items = items.split(",")
-            embedVar.add_field(name=items[0], value=items[1], inline=False)
-        await ctx.send(embed=embedVar)
-
     except Exception as e:
         print(e)
 
