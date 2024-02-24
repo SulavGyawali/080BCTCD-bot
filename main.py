@@ -4,14 +4,14 @@ from discord.ext import tasks  # type: ignore
 from discord.utils import get  # type: ignore
 import json
 import datetime
-from dotenv import load_dotenv # type: ignore
-import os # type: ignore
+from dotenv import load_dotenv  # type: ignore
+import os  # type: ignore
 from PIL import Image, ImageDraw, ImageFont  # type: ignore
 
-
+load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
-ROUTINE_TIME = datetime.time(14, 45, 0)
+ROUTINE_TIME = datetime.time(14, 31, 0)
 ROUTINE_CONFIRM = datetime.time(14, 15, 0)
 
 updated_d = {}
@@ -22,14 +22,63 @@ intents.message_content = True
 intents.members = True
 Client = Bot(command_prefix="!", intents=intents, help_command=None)
 
+async def daily_test_update() -> None:
+    try:
+        with open("test.json", "r") as file:
+            data = json.load(file)
+        tomorrow = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
+        if tomorrow in data:
+            for test in data[tomorrow]:
+                await Client.get_channel(1208009536565420052).send(f"Test: {test} tomorrow")
+    except Exception as e:
+        print(e)
+    
+
+async def add_test_function(date: str, test: str) -> None:
+    try:
+        with open("test.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+    
+    if date in data:
+        data[date].append(test)
+    else:
+        data[date] = [test]
+    with open("test.json", "w") as file:
+        json.dump(data, file)
+
+async def remove_test_function(date: str, test: str) -> None:
+    try:
+        with open("test.json", "r") as file:
+            data = json.load(file)
+        with open("test.json", "w") as file:
+            if date in data:
+                data[date].remove(test)
+                if data[date] == []:
+                    data.pop(date)
+                json.dump(data, file)
+            else:
+                return
+    except Exception as e:
+        print(e)
+
+async def get_test_function() -> str:
+    try:
+        with open("test.json", "r") as file:
+            data = json.load(file)
+    except FileNotFoundError:
+        data = {}
+    return data
+
 
 async def AddAssignment(subject: str, date: str, assignment: str) -> None:
     try:
         with open("assignments.json", "r") as file:
             data = json.load(file)
-    except:
+    except FileNotFoundError:
         data = {}
-    
+
     if date in data:
         data[date].append(f"{subject}: {assignment}")
     else:
@@ -53,15 +102,15 @@ async def RemoveAssignment(date: str, subject: str, assignment: str) -> None:
 
 
 async def GetAssignments() -> str:
-    with open("assignments.json", "r") as file:
-        try:
+    try:
+        with open("assignments.json", "r") as file:
             data = json.load(file)
-        except:
-            data = {}
-        return data
+    except FileNotFoundError:
+        data = {}
+    return data
 
 
-async def routine_image(group : str) -> None:
+async def routine_image(group: str) -> None:
     try:
         day = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%A")
         day = day.lower()
@@ -98,7 +147,6 @@ async def AddEvent(date: str, event: str) -> None:
         data[date] = [event]
     with open("events.json", "w") as file:
         json.dump(data, file)
-    
 
 
 async def RemoveEvent(date: str, event: str) -> None:
@@ -113,6 +161,7 @@ async def RemoveEvent(date: str, event: str) -> None:
         else:
             return
 
+
 async def assignment_image(assignments) -> None:
     try:
         img = Image.open("assignments.png")
@@ -123,8 +172,8 @@ async def assignment_image(assignments) -> None:
         for i, (teacher, value) in enumerate(assignments.items()):
             d.text((44, 85 + i * 50), f"{teacher}", fill=(0, 255, 0), font=fnt1)
             for j, assignment in enumerate(value):
-                date = assignment.split(':')[0]
-                subject = assignment.split(':')[1]
+                date = assignment.split(":")[0]
+                subject = assignment.split(":")[1]
                 day = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%A")
                 d.text(
                     (44, 125 + i * 50 + j * 50),
@@ -135,6 +184,7 @@ async def assignment_image(assignments) -> None:
         img.save("assignment.png")
     except Exception as e:
         print(e)
+
 
 async def event_image(events) -> None:
     try:
@@ -157,7 +207,7 @@ async def event_image(events) -> None:
         print(e)
 
 
-async def get_routine(group : str) -> str:
+async def get_routine(group: str) -> str:
     global updated_d, updated_c
     if group.lower() == "d":
         if updated_d != {}:
@@ -170,6 +220,7 @@ async def get_routine(group : str) -> str:
         routine = json.load(file)
     return routine
 
+
 async def get_members(guild_id: int) -> str:
     try:
         guild = Client.get_guild(guild_id)
@@ -178,6 +229,31 @@ async def get_members(guild_id: int) -> str:
     except Exception as e:
         print(e)
         return None
+
+async def test_image(channel:str):
+    try:
+        img = Image.new("RGB", (500, 800), color=(0, 0, 0))
+        d = ImageDraw.Draw(img)
+        fnt1 = ImageFont.truetype("Arial.ttf", 45)
+        d.text((180, 13), "Tests", fill=(255, 255, 255), font=fnt1, stroke_fill='white')
+        d.line([(180, 60), (300,60)], fill=(255, 255, 255), width=4)
+        fnt = ImageFont.truetype("Arial.ttf", 35)
+        fnt2 = ImageFont.truetype("Arial.ttf", 25)
+        with open("test.json", "r") as file:
+            data = json.load(file)
+        for i, (date, value) in enumerate(data.items()):
+            day = datetime.datetime.strptime(date, "%Y-%m-%d").strftime("%A")
+            d.text((44, 85 + i * 85), f"{date}({day})", fill=(0, 255, 0), font=fnt)
+            for j, test in enumerate(value):
+                d.text(
+                    (44, 135 + i * 80 + j * 80),
+                    f"{j + 1}. {test}",
+                    fill=(255, 255, 255),
+                    font=fnt2,
+                )
+        img.save("test.png")
+    except Exception as e:
+        print(e)
 
 
 @tasks.loop(time=ROUTINE_TIME)
@@ -189,6 +265,7 @@ async def send_routine() -> None:
         await routineimage(channel, "d")
         updated_d = {}
         updated_c = {}
+        await daily_test_update()
     except Exception as e:
         print(e)
 
@@ -223,9 +300,38 @@ async def send_routine_confirm() -> None:
     except Exception as e:
         print(e)
 
+@Client.command()
+@has_permissions(administrator=True)
+async def add_test(ctx, date: str, test: str) -> None:
+    try:
+        await add_test_function(date, test)
+        await ctx.send(f"{test} has been added to {date}")
+    except Exception as e:
+        print(e)
 
 @Client.command()
-async def routineimage(ctx, group : str) -> None:
+@has_permissions(administrator=True)
+async def remove_test(ctx, date: str, test: str) -> None:
+    try:
+        await remove_test_function(date, test)
+        await ctx.send(f"{test} has been removed from {date}")
+    except Exception as e:
+        print(e)
+    
+@Client.command()
+async def get_test(ctx) -> None:
+    try:
+        tests = await get_test_function()
+        if tests == {}:
+            await ctx.send("No tests available")
+            return
+        await test_image(ctx)
+        await ctx.send(file=File("test.png"))
+    except Exception as e:
+        print(e)
+
+@Client.command()
+async def routineimage(ctx, group: str) -> None:
     try:
         await routine_image(group)
         with open("events.json", "r") as file:
@@ -266,6 +372,7 @@ async def remove_assignment(ctx, date: str, subject: str, assignment: str) -> No
     except Exception as e:
         print(e)
 
+
 @Client.command()
 async def get_assignments(ctx) -> None:
     try:
@@ -281,7 +388,7 @@ async def get_assignments(ctx) -> None:
 
 @Client.command()
 @has_permissions(administrator=True)
-async def update_routine(ctx, group : str , *, message: str) -> None:
+async def update_routine(ctx, group: str, *, message: str) -> None:
     try:
         day = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%A")
         global updated_d, updated_c
@@ -289,16 +396,16 @@ async def update_routine(ctx, group : str , *, message: str) -> None:
         if group.lower() == "d":
             if updated_d != {}:
                 routine = updated_d
-            else:  
+            else:
                 with open(f"Routine_d.json", "r") as file:
-                    routine = json.load(file) 
+                    routine = json.load(file)
         elif group.lower() == "c":
             if updated_c != {}:
                 routine = updated_c
             else:
                 with open(f"Routine_c.json", "r") as file:
                     routine = json.load(file)
-            
+
         for i, teacher in enumerate(routine[day]):
             if message.split(",")[0] in teacher:
                 routine[day][i] = message
@@ -387,7 +494,7 @@ async def guest(ctx) -> None:
 
 
 @Client.command()
-async def routine(ctx, group : str) -> None:
+async def routine(ctx, group: str) -> None:
     try:
         await routineimage(ctx, group)
     except Exception as e:
