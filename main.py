@@ -11,7 +11,7 @@ from PIL import Image, ImageDraw, ImageFont  # type: ignore
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
 CHANNEL_ID = int(os.getenv("CHANNEL_ID"))
-ROUTINE_TIME = datetime.time(14, 31, 0)
+ROUTINE_TIME = datetime.time(14, 45, 0)
 ROUTINE_CONFIRM = datetime.time(14, 15, 0)
 
 updated_d = {}
@@ -259,7 +259,7 @@ async def test_image(channel:str):
 @tasks.loop(time=ROUTINE_TIME)
 async def send_routine() -> None:
     try:
-        channel = await Client.fetch_channel(CHANNEL_ID)
+        channel = await Client.fetch_channel(1208790747537604618)
         global updated_d, updated_c
         await routineimage(channel, "c")
         await routineimage(channel, "d")
@@ -503,7 +503,7 @@ async def routine(ctx, group: str) -> None:
 
 @Client.command()
 async def help(ctx) -> None:
-    await ctx.send("Help command banauna alchi lagyo :)")
+    await ctx.send("Help command banauna alchi lagyo :).")
 
 
 @Client.command()
