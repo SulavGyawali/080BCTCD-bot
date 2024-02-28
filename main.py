@@ -133,7 +133,7 @@ async def routine_image(group: str) -> None:
                 fill=(255, 255, 255),
                 font=fnt,
             )
-        img.save(f"routine{group.lower()}.png")
+        img.save(f"./routine{group.lower()}.png")
     except Exception as e:
         print(e)
 
@@ -348,7 +348,7 @@ async def routineimage(ctx, group: str) -> None:
         elif "Holiday" in events[date]:
             await ctx.send(f"{day} is a holiday")
             return
-        await ctx.send(file=File(f"routine{group.lower()}.png"))
+        await ctx.send(file=File(f"./routine{group.lower()}.png"))
     except Exception as e:
         print(e)
 
