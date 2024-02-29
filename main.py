@@ -503,7 +503,7 @@ async def routine(ctx, group: str) -> None:
 
 @Client.command()
 async def help(ctx) -> None:
-    await ctx.send("Help command banauna alchi lagyo :).")
+    await ctx.send("Help command banauna alchi lagyo :)")
 
 
 @Client.command()
