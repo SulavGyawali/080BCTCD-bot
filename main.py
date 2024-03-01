@@ -119,9 +119,9 @@ async def routine_image(group: str) -> None:
             "%Y-%m-%d"
         )
         data = await get_routine(group)
-        if data == {}:
-            data = {"Saturday": " , "}
         img = Image.open(f"Routine_{group.upper()}.png")
+        if data[day] == {}:
+            img.save(f"./routine{group.lower()}.png")
         d = ImageDraw.Draw(img)
         fnt = ImageFont.truetype("Arial.ttf", 30)
         d.text((124, 90), f"{date}", fill=(255, 255, 255), font=fnt)
