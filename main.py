@@ -120,7 +120,7 @@ async def routine_image(group: str) -> None:
         )
         data = await get_routine(group)
         if data == {}:
-            data = ["Saturday": " , "]
+            data = {"Saturday": " , "}
         img = Image.open(f"Routine_{group.upper()}.png")
         d = ImageDraw.Draw(img)
         fnt = ImageFont.truetype("Arial.ttf", 30)
