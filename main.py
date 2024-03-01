@@ -293,7 +293,7 @@ async def send_routine_confirm() -> None:
     try:
         channel = await Client.fetch_channel(1208958358217039903)
         await channel.send(
-            "Routine will be sent at 8:00 PM. Please confirm the routine "
+            "Routine will be sent at 8:30 PM. Please confirm the routine "
         )
         await routineimage(channel, "c")
         await routineimage(channel, "d")
