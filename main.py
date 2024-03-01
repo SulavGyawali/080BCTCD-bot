@@ -120,8 +120,6 @@ async def routine_image(group: str) -> None:
         )
         data = await get_routine(group)
         img = Image.open(f"Routine_{group.upper()}.png")
-        if data[day] == {}:
-            img.save(f"./routine{group.lower()}.png")
         d = ImageDraw.Draw(img)
         fnt = ImageFont.truetype("Arial.ttf", 30)
         d.text((124, 90), f"{date}", fill=(255, 255, 255), font=fnt)
@@ -341,10 +339,15 @@ async def routineimage(ctx, group: str) -> None:
                 events = json.load(file)
             except:
                 events = {}
+
+        with open(f"Routine_{group.lower()}.json", "r") as file:
+            routine = json.load(file)
         day = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%A")
         date = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime(
             "%Y-%m-%d"
         )
+        if routine[day] == [""]:
+            return
         if not date in events.keys():
             pass
         elif "Holiday" in events[date]:
