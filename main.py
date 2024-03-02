@@ -29,7 +29,7 @@ async def daily_test_update() -> None:
         tomorrow = (datetime.datetime.today() + datetime.timedelta(days=1)).strftime("%Y-%m-%d")
         if tomorrow in data:
             for test in data[tomorrow]:
-                await Client.get_channel(1208009536565420052).send(f"Test: {test} tomorrow")
+                await Client.get_channel(1195991133281583115).send(f"Test: {test} tomorrow")
     except Exception as e:
         print(e)
     
